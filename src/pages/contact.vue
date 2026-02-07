@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center flex-column" :class="{ 'w-33': !mobile, 'w-66': mobile }">
+  <div class="d-flex align-center flex-column" :class="{ 'w-33': !mobile }">
     <div class="d-flex ga-2 flex-wrap align-center justify-center mb-2">
       <v-chip
         class="mb-2"
