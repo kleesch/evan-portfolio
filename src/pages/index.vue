@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld />
+  <Spotlight />
 </template>
 
 <script lang="ts" setup>
