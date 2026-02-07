@@ -113,7 +113,7 @@
 .curtain {
   position: absolute;
   top: 0;
-  height: 98vh;
+  height: 100vh;
   width: 12vw; /* Each curtain covers one side of the screen */
   background: repeating-linear-gradient(
     to right,
@@ -136,7 +136,7 @@
 .curtain-bottom {
   position: absolute;
   bottom: 0;
-  height: 5%;
+  height: 7%;
   width:100%;
   background: rgb(11,11,11)
 }
