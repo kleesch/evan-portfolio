@@ -1,59 +1,68 @@
 <template>
   <v-main>
-    <div class="w-100 h-100">
+    <div class="w-100 h-100 layout-root" :class="{ 'curtains-slim': mobile }">
       <div v-if="!mobile" class="copyright">Copyright © {{ new Date().getFullYear() }} Evan Chilcote</div>
       <div
         class="curtain left-curtain"
-        :class="{ 'curtain-closed': appStore.curtainClosed }"
+        :class="{ 'curtain-closed': appStore.curtainShut }"
       >
         <div class="curtain-bottom box" />
       </div>
       <div
         class="curtain right-curtain"
-        :class="{ 'curtain-closed': appStore.curtainClosed }"
+        :class="{ 'curtain-closed': appStore.curtainShut }"
       >
         <div class="curtain-bottom box" />
       </div>
       <div class="w-100 h-100 d-flex  justify-center overflow-y-auto main" :class="{ 'bg-home_': isHome, 'bg-other': true }" style="max-height:100vh;">
-        <v-container style="max-width:80vw;">
+        <v-container class="between-curtains">
           <v-row justify="center">
-            <v-col class="d-flex align-center justify-center flex-column" :class="{ 'mt-12': !mobile }" cols="6">
+            <v-col class="d-flex align-center justify-center flex-column" :class="{ 'mt-12': !mobile }" :cols="mobile ? 12 : 6">
               <!--v-img.white(src='@/assets/NameHeader.png' style='width:50vw;' cover)-->
               <div class="text-grey-lighten-4 shadow cursor-pointer text-no-wrap nav-header" :class="{ 'nav-header-mobile': mobile }" style="" @click="router.push('/')"> Evan Chilcote</div>
-              <div class="w-100 d-flex align-center justify-center">
+              <div v-if="stackNav" class="tagline shadow">Trumpeter</div>
+              <div class="w-100 d-flex align-center justify-center" :class="{ 'flex-column ga-3 mt-4': stackNav }">
                 <v-btn
-                  class="text-capitalize mr-2"
-
+                  class="text-capitalize"
+                  :class="stackNav ? 'nav-btn-pill' : 'mr-2'"
                   prepend-icon="mdi-account-music"
-                  :size="mobile ? 'small' : 'x-large'"
+                  :rounded="stackNav ? 'pill' : undefined"
+                  :size="stackNav ? 'default' : (mobile ? 'small' : 'x-large')"
                   text="About"
                   to="/about"
-                  variant="text"
-                />
-                <v-btn
-                  class="text-capitalize mr-2"
-
-                  prepend-icon="mdi-multimedia"
-                  :size="mobile ? 'small' : 'x-large'"
-                  text="Media"
-                  to="/media"
-                  variant="text"
+                  :variant="stackNav ? 'outlined' : 'text'"
                 />
                 <v-btn
                   class="text-capitalize"
-
+                  :class="stackNav ? 'nav-btn-pill' : 'mr-2'"
+                  prepend-icon="mdi-multimedia"
+                  :rounded="stackNav ? 'pill' : undefined"
+                  :size="stackNav ? 'default' : (mobile ? 'small' : 'x-large')"
+                  text="Media"
+                  to="/media"
+                  :variant="stackNav ? 'outlined' : 'text'"
+                />
+                <v-btn
+                  class="text-capitalize"
+                  :class="{ 'nav-btn-pill': stackNav }"
                   prepend-icon="mdi-email"
-                  :size="mobile ? 'small' : 'x-large'"
+                  :rounded="stackNav ? 'pill' : undefined"
+                  :size="stackNav ? 'default' : (mobile ? 'small' : 'x-large')"
                   text="Contact"
                   to="/contact"
-                  variant="text"
+                  :variant="stackNav ? 'outlined' : 'text'"
                 />
               </div>
             </v-col>
           </v-row>
           <v-row justify="center">
             <v-col class="d-flex justify-center" cols="12">
-              <router-view />
+              <!-- Keep the media page alive so its Instagram iframes don't reload on every visit -->
+              <router-view v-slot="{ Component }">
+                <KeepAlive include="MediaPage">
+                  <component :is="Component" />
+                </KeepAlive>
+              </router-view>
             </v-col>
           </v-row>
         </v-container>
@@ -75,10 +84,26 @@
   const { mobile } = useDisplay()
 
   const isHome = computed(() => route.path === '/')
+  // Stack nav vertically on the mobile homepage, where there's room above the performer
+  const stackNav = computed(() => mobile.value && isHome.value)
 </script>
 
 <style scoped>
 .main {
+}
+
+.layout-root {
+  --curtain-w: 12vw;
+}
+
+.curtains-slim {
+  --curtain-w: 4vw;
+}
+
+/* Keep page content out from under the curtains */
+.between-curtains {
+  max-width: none;
+  padding-inline: calc(var(--curtain-w) + 8px);
 }
 
 .bg-home {
@@ -114,7 +139,7 @@
   position: absolute;
   top: 0;
   height: 100vh;
-  width: 12vw; /* Each curtain covers one side of the screen */
+  width: var(--curtain-w); /* Each curtain covers one side of the screen */
   background: repeating-linear-gradient(
     to right,
     rgba(8, 8, 8) 0px,
@@ -148,8 +173,23 @@
 }
 
 .nav-header-mobile {
-  margin-bottom: -10px;
-  font-size: 14vw
+  margin-bottom: -16px;
+  font-size: 21vw
+}
+
+.tagline {
+  margin-top: -3vw; /* tuck up under the script title's tall line box */
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 5.5vw;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.nav-btn-pill {
+  width: 60vw;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .curtain-closed {

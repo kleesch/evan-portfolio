@@ -54,6 +54,11 @@ export default defineConfig({
             weights: [100, 300, 400, 500, 700, 900],
             styles: ['normal', 'italic'],
           },
+          {
+            name: 'Cormorant Garamond',
+            weights: [300, 400],
+            styles: ['normal', 'italic'],
+          },
         ],
       },
     }),

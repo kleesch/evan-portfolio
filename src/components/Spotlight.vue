@@ -1,5 +1,5 @@
 <template>
-  <v-img :class="{ 'player-desktop': !mobile, 'player-mobile': mobile }" src="@/assets/Gemini_Generated_Image_aawvebaawvebaawv (1).png" />
+  <v-img :class="{ 'player-desktop': !mobile, 'player-mobile': mobile }" position="bottom" src="@/assets/performer-cropped.png" />
 </template>
 
 <script setup lang="ts">
@@ -19,7 +19,10 @@
 .player-mobile {
   position: absolute;
   bottom: 5vh;
-  width: 100vw;
-  height: 50vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 76vw;
+  /* Cap height so the head clears the stacked nav on short screens */
+  height: min(62vh, calc(95vh - 300px));
 }
 </style>
