@@ -1,5 +1,5 @@
 <template>
-  <v-img :class="{ 'player-desktop': !mobile, 'player-mobile': mobile }" position="bottom" src="@/assets/performer-cropped.png" />
+  <v-img class="spotlight-glow" :class="{ 'player-desktop': !mobile, 'player-mobile': mobile }" position="bottom" src="@/assets/EvanSitting.png" />
 </template>
 
 <script setup lang="ts">
