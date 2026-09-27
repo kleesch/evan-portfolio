@@ -4,6 +4,11 @@
       Enjoy a selection of media that I'm featured in!
     </div>
 
+    <div v-if="embedBlocked" class="blocked-note mb-6">
+      <v-icon class="mr-1" icon="mdi-shield-off-outline" size="small" />
+      Posts not showing? An ad blocker may be hiding them. Pause it for this site, or open each post on Instagram.
+    </div>
+
     <div class="media-grid">
       <div
         v-for="permalink in posts"
@@ -14,7 +19,18 @@
           class="instagram-media"
           :data-instgrm-permalink="permalink"
           data-instgrm-version="14"
-        />
+        >
+          <!-- Shown until embed.js swaps in the post, or for good if it's blocked -->
+          <a
+            class="embed-fallback"
+            :href="permalink"
+            rel="noopener"
+            target="_blank"
+          >
+            <v-icon class="mb-3" icon="mdi-instagram" size="40" />
+            <span class="embed-fallback-label">View on Instagram</span>
+          </a>
+        </blockquote>
       </div>
       <!--      <v-img src="@/assets/MannesRecognitionCeremony2024.jpg" />-->
     </div>
@@ -42,7 +58,9 @@
 
   const loadedFrames = ref(new Set<string | number>())
   const timedOut = ref(false)
-  const allLoaded = computed(() => timedOut.value || loadedFrames.value.size >= posts.length)
+  // Set when embed.js fails to load (see the onerror in index.html)
+  const embedBlocked = ref(Boolean((window as any).__igEmbedFailed))
+  const allLoaded = computed(() => timedOut.value || embedBlocked.value || loadedFrames.value.size >= posts.length)
   let revealTimer: ReturnType<typeof setTimeout> | undefined
 
   // Undocumented hook: embed.js calls this once per embed after the iframe
@@ -65,7 +83,13 @@
     }
   })
 
+  function onEmbedFailed () {
+    embedBlocked.value = true
+  }
+
   onMounted(() => {
+    window.addEventListener('ig-embed-failed', onEmbedFailed)
+
     revealTimer = setTimeout(() => {
       timedOut.value = true
     }, REVEAL_TIMEOUT_MS)
@@ -78,6 +102,7 @@
 
   onUnmounted(() => {
     clearTimeout(revealTimer)
+    window.removeEventListener('ig-embed-failed', onEmbedFailed)
     appStore.curtainHeld = false
     delete (window as any).__igEmbedLoaded
   })
@@ -100,14 +125,55 @@
 
   /* Applies to both the blockquote placeholder and the iframe Instagram swaps in */
   .media-grid :deep(.instagram-media) {
-    background: #fff;
     border: 0;
     border-radius: 3px;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.15);
     padding: 0;
     margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important; /* override Instagram's 326px floor on very small phones */
+  }
+
+  /* Only the rendered post gets Instagram's white card; the placeholder stays dark */
+  .media-grid :deep(iframe.instagram-media) {
+    background: #fff;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 10px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .blocked-note {
+    max-width: 640px;
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  /* Placeholder link: shown while embed.js loads, and for good if it's blocked */
+  .embed-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 5;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+  }
+
+  .embed-fallback:hover,
+  .embed-fallback:focus-visible {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+  }
+
+  /* Matches the home page tagline */
+  .embed-fallback-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
   }
 </style>
