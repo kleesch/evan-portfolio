@@ -20,7 +20,7 @@
             <v-col class="d-flex align-center justify-center flex-column" :class="{ 'mt-12': !mobile }" :cols="mobile ? 12 : 6">
               <!--v-img.white(src='@/assets/NameHeader.png' style='width:50vw;' cover)-->
               <div class="text-grey-lighten-4 shadow cursor-pointer text-no-wrap nav-header" :class="{ 'nav-header-mobile': mobile }" style="" @click="router.push('/')"> Evan Chilcote</div>
-              <div v-if="stackNav" class="tagline shadow">Trumpeter</div>
+<!--              <div v-if="stackNav" class="tagline shadow">Trumpeter</div>-->
               <div class="w-100 d-flex align-center justify-center" :class="{ 'flex-column ga-3 mt-4': stackNav }">
                 <v-btn
                   class="text-capitalize"
