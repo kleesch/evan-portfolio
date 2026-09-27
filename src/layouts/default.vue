@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <div class="w-100 h-100 layout-root" :class="{ 'curtains-slim': mobile }">
+    <div class="w-100 layout-root" :class="{ 'curtains-slim': mobile }">
       <div v-if="!mobile" class="copyright">Copyright © {{ new Date().getFullYear() }} Evan Chilcote</div>
       <div
         class="curtain left-curtain"
@@ -14,7 +14,7 @@
       >
         <div class="curtain-bottom box" />
       </div>
-      <div class="w-100 h-100 d-flex  justify-center overflow-y-auto main" :class="{ 'bg-home_': isHome, 'bg-other': true }" style="max-height:100vh;">
+      <div class="w-100 h-100 d-flex  justify-center overflow-y-auto main" :class="{ 'bg-home_': isHome, 'bg-other': true }">
         <v-container class="between-curtains">
           <v-row justify="center">
             <v-col class="d-flex align-center justify-center flex-column" :class="{ 'mt-12': !mobile }" :cols="mobile ? 12 : 6">
@@ -94,6 +94,12 @@
 
 .layout-root {
   --curtain-w: 12vw;
+  /* Size the stage to the *visible* viewport. On phones 100vh includes the area behind
+     the browser toolbars, which pushed the floor/curtains off-screen and misaligned Evan. */
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .curtains-slim {
@@ -138,7 +144,7 @@
 .curtain {
   position: absolute;
   top: 0;
-  height: 100vh;
+  height: 100%;
   width: var(--curtain-w); /* Each curtain covers one side of the screen */
   background: repeating-linear-gradient(
     to right,
