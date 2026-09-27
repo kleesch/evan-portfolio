@@ -1,81 +1,93 @@
-# Vuetify (Default)
+# Evan Chilcote — Portfolio
 
-This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
+Personal portfolio site for trumpeter Evan Chilcote. It's a single-page app built with Vue 3, Vuetify 3, and Vite, styled like a theater stage: black curtains close and reopen on every page change.
 
-## ❗️ Important Links
+## Pages
 
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
+| Route      | File                     | Contents                                                                  |
+|------------|--------------------------|---------------------------------------------------------------------------|
+| `/`        | `src/pages/index.vue`    | Landing page: the performer cutout (`Spotlight`) center stage             |
+| `/about`   | `src/pages/about.vue`    | Headshot and bio                                                          |
+| `/media`   | `src/pages/media.vue`    | Grid of embedded Instagram posts Evan is featured in                      |
+| `/contact` | `src/pages/contact.vue`  | Instagram/email links and a validated contact form                        |
 
-## 💿 Install
+Routes are generated automatically from `src/pages/` by [unplugin-vue-router](https://github.com/posva/unplugin-vue-router). Every page renders inside `src/layouts/default.vue`, which holds the curtains, the name header, and the navigation.
 
-Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
+## Tech Stack
 
-| Package Manager                                                | Command        |
-|---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
+- [Vue 3](https://vuejs.org/) with `<script setup>` and TypeScript
+- [Vuetify 3](https://vuetifyjs.com/) for components and layout, following the system light/dark theme
+- [Vite](https://vitejs.dev/) as the dev server and bundler
+- [Pinia](https://pinia.vuejs.org/) for curtain state
+- [Material Design Icons](https://pictogrammers.com/library/mdi/) (`@mdi/font`)
+- Fonts: Rollete Qaku (self-hosted in `src/fonts/`) for the name header, Cormorant Garamond for the tagline, and Roboto for body text, both via Fontsource
+- Auto-imported components and APIs through `unplugin-vue-components` and `unplugin-auto-import`
 
-After completing the installation, your environment is ready for Vuetify development.
+## Getting Started
 
-## ✨ Features
-
-- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) | [Vuetify 3](https://vuetifyjs.com/en/)
-- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/), the intuitive, modular state management solution for Vue.
-- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and vite-plugin-vue-layouts-next for organizing Vue file layouts. [Vue Router](https://router.vuejs.org/) | [vite-plugin-vue-layouts-next](https://github.com/loicduong/vite-plugin-vue-layouts-next)
-- 💻 **Enhanced Development Experience**: Benefit from TypeScript's static type checking and the ESLint plugin suite for Vue, ensuring code quality and consistency. [TypeScript](https://www.typescriptlang.org/) | [ESLint Plugin Vue](https://eslint.vuejs.org/)
-- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
-- 🧩 **Automated Component Importing**: Streamline your workflow with unplugin-vue-components, automatically importing components as you use them. [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
-- 🛠️ **Strongly-Typed Vue**: Use vue-tsc for type-checking your Vue components, and enjoy a robust development experience. [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/packages/vue-tsc)
-
-These features are curated to provide a seamless development experience from setup to deployment, ensuring that your Vuetify application is both powerful and maintainable.
-
-## 💡 Usage
-
-This section covers how to start the development server and build your project for production.
-
-### Starting the Development Server
-
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
+Requires Node 22 or later.
 
 ```bash
-yarn dev
+npm install
+npm run dev
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+The dev server runs at [http://localhost:3000](http://localhost:3000).
 
-> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that happen as part of the Vuetify import mapping. If you are on Node [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the warning, you can remove this from your package.json dev script.
+### Scripts
 
-### Building for Production
+| Command              | Description                                             |
+|----------------------|---------------------------------------------------------|
+| `npm run dev`        | Start the Vite dev server with hot reload               |
+| `npm run build`      | Type-check with `vue-tsc` and build to `dist/`          |
+| `npm run build-only` | Build without type-checking                             |
+| `npm run preview`    | Serve the production build locally                      |
+| `npm run type-check` | Run `vue-tsc` on its own                                |
+| `npm run lint`       | Run ESLint (`eslint-config-vuetify`) with `--fix`       |
 
-To build your project for production, use:
+## Project Structure
 
-```bash
-yarn build
+```
+src/
+├── assets/        Images: backgrounds, headshot, performer cutout
+├── components/    Spotlight.vue (home page performer image)
+├── fonts/         Rollete Qaku header font
+├── layouts/       default.vue: curtains, header, nav, <router-view>
+├── pages/         One file per route (file-based routing)
+├── plugins/       Vuetify, Pinia, and router registration
+├── router/        Router setup and curtain transition guards
+├── stores/        app.ts: curtain state
+└── styles/        Vuetify SCSS settings
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+`src/auto-imports.d.ts`, `src/components.d.ts`, and `src/typed-router.d.ts` are generated by the Vite plugins. Don't edit them by hand.
 
-Once the build process is completed, your application will be ready for deployment in a production environment.
+## How It Works
 
-## 💪 Support Vuetify Development
+### Curtain transitions
 
-This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:
+The curtain state lives in `src/stores/app.ts`:
 
-- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
-- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
-- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
-- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
-- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
-- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
-- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
+- `curtainClosed` is set by the router. In `src/router/index.ts`, `beforeEach` closes the curtains and waits about 525 ms for the CSS transition to finish before navigating. `afterEach` reopens them.
+- `curtainHeld` lets a page keep the curtains shut after navigation until its content is ready.
+- `curtainShut` is true when either flag is set. The layout binds to it.
 
-## 📑 License
-[MIT](http://opensource.org/licenses/MIT)
+While the curtains are closed, the router warms up the next page. It preloads that page's images (`preloadImages`) and opens connections to its third-party hosts (`preconnectHosts`). Add entries to those maps when a new page needs large images or external embeds.
 
-Copyright (c) 2016-present Vuetify, LLC
+On mobile the curtains shrink from `12vw` to `4vw` (the `--curtain-w` variable in the layout), and the nav stacks vertically on the home page.
+
+### Instagram embeds (Media page)
+
+Instagram's `embed.js` is loaded in `index.html`. The Media page:
+
+1. Renders one `<blockquote class="instagram-media">` for each permalink in the `posts` array, then calls `instgrm.Embeds.process()`.
+2. Keeps the curtains held until every embed has rendered. It does this through `window.__igEmbedLoaded`, an **undocumented** hook that `embed.js` calls for each finished embed. If Instagram changes or removes the hook, a 6-second timeout (`REVEAL_TIMEOUT_MS`) opens the curtains anyway.
+3. Stays cached in the layout's `<KeepAlive include="MediaPage">`, so the iframes don't reload on every visit.
+
+To change which posts appear, edit the `posts` array in `src/pages/media.vue`.
+
+## License
+
+Copyright © Kyle Leesch & Evan Chilcote. All rights reserved.
+
+This repository is not licensed for reuse. The code, images, and personal content may not be copied, modified, or distributed without permission.
