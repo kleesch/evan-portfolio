@@ -9,11 +9,30 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
+import { copyFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
+
+// GitHub Pages has no SPA fallback, but serves 404.html for unknown paths.
+// Copying index.html there lets deep links like /about load the app.
+function spaFallback (): Plugin {
+  let outDir = 'dist'
+  return {
+    name: 'spa-fallback-404',
+    apply: 'build',
+    configResolved (config) {
+      outDir = config.build.outDir
+    },
+    closeBundle () {
+      copyFileSync(`${outDir}/index.html`, `${outDir}/404.html`)
+    },
+  }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Served from https://mrzakch.github.io/evan-portfolio/ when built for GitHub Pages
+  base: process.env.GITHUB_PAGES ? '/evan-portfolio/' : '/',
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
@@ -62,6 +81,7 @@ export default defineConfig({
         ],
       },
     }),
+    spaFallback(),
   ],
   optimizeDeps: {
     exclude: [
