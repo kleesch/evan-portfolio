@@ -49,7 +49,7 @@ The dev server runs at [http://localhost:3000](http://localhost:3000).
 
 Every push to `master` builds the site and deploys it to GitHub Pages at [https://mrzakch.github.io/evan-portfolio/](https://mrzakch.github.io/evan-portfolio/) (`.github/workflows/deploy.yml`). You can also run the workflow by hand from the Actions tab.
 
-The workflow builds with `GITHUB_PAGES=true`, which sets Vite's `base` to `/evan-portfolio/`. The build also copies `index.html` to `404.html`, so a direct link or a refresh on a route like `/about` still loads the app. Pages must be set to use **GitHub Actions** as its source (Settings → Pages).
+The workflow builds with `GITHUB_PAGES=true`, which sets Vite's `base` to `/evan-portfolio/`. The build also copies `index.html` to `<page>.html` for each top-level page in `src/pages/` (Pages serves `/about` from `about.html`), so a direct link or a refresh on a route loads with a 200. It also copies it to `404.html`, so any other path still loads the app. Pages must be set to use **GitHub Actions** as its source (Settings → Pages).
 
 ## Project Structure
 

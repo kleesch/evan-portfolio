@@ -10,21 +10,27 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // Utilities
 import { defineConfig, type Plugin } from 'vite'
-import { copyFileSync } from 'node:fs'
+import { copyFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 
-// GitHub Pages has no SPA fallback, but serves 404.html for unknown paths.
-// Copying index.html there lets deep links like /about load the app.
+// GitHub Pages has no SPA fallback. It serves /about from about.html, so each
+// top-level page gets a copy of index.html to load with a 200. Anything else
+// falls back to 404.html, which still loads the app (with a 404 status).
 function spaFallback (): Plugin {
   let outDir = 'dist'
   return {
-    name: 'spa-fallback-404',
+    name: 'spa-fallback',
     apply: 'build',
     configResolved (config) {
       outDir = config.build.outDir
     },
     closeBundle () {
-      copyFileSync(`${outDir}/index.html`, `${outDir}/404.html`)
+      const pages = readdirSync('src/pages')
+        .filter(file => file.endsWith('.vue') && file !== 'index.vue')
+        .map(file => file.slice(0, -'.vue'.length))
+      for (const name of [...pages, '404']) {
+        copyFileSync(`${outDir}/index.html`, `${outDir}/${name}.html`)
+      }
     },
   }
 }
